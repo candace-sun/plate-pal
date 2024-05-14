@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>PlatePal</title>
+</head>
+<body>
+    <img src="plate.png" class="plate"/>
+    <img src="fork-knife-2-rotated.png" class="fork-knife"/>
+    <div class="centered-container">
+        <h1>PlatePal</h1>
+        <form action="/welcome" method="post" onsubmit="startLoader()">
+            <label for="name">What's your name?<br><br> <input type="text" name="name" required/></label><br><br>
+            <label for="name">Enter a passphrase:<br><br> <input type="text" name="passphrase" required/></label><br><br><br>
+            <input type="submit" value="Continue >" /> <br>
+        </form><br>
+
+        
+        <div id="loader">Signing you in...</div>
+    </div>
+
+    <script> 
+        document.getElementById("loader").style.visibility = "hidden";
+        
+        function startLoader() {
+            document.getElementById("loader").style.visibility = "visible"; 
+        }
+    </script>
+
+</body>
+</html>

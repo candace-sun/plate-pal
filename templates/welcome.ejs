@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>PlatePal</title>
+</head>
+<body>
+    <img src="plate.png" class="plate"/>
+    <img src="fork-knife-2-rotated.png" class="fork-knife"/>
+    <div class="centered-container">
+        <h1>PlatePal</h1>
+        <div>Welcome, <%- name %>!</div><br> 
+
+        <form action="/upload-meal" onsubmit="startLoader()">
+            <input type="submit" value="Enter new meal >"/>
+        </form> <br>
+
+        <form action="/past-meals" onsubmit="startLoader()">
+            <input type="submit" value="View past meals >"/>
+        </form>  <br>
+
+                
+        <div id="loader">Loading...</div>
+    </div>
+
+    <script> 
+        document.getElementById("loader").style.visibility = "hidden";
+        
+        function startLoader() {
+            document.getElementById("loader").style.visibility = "visible"; 
+        }
+    </script>
+ 
+</body>
+</html>

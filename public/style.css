@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&family=Lilita+One&display=swap');
+
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #454545;
+    color: #E6E6E6; 
+    margin:0px;
+    box-sizing: border-box;
+    padding: 2.4rem; 
+    font-family: "Kumbh Sans", sans-serif; 
+    font-size: 1rem;
+    height: 100%; 
+    
+    animation: fadeInAnimation ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+ 
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+h1, .title {
+    font-family: "Lilita One", sans-serif;
+    font-weight: 400;
+    font-size: 2.7rem;
+    font-style: normal;
+    margin-top: 0%; 
+}
+
+a, .title, a:hover, a:active, a:visited {
+    text-decoration: none;
+    color: #E6E6E6; 
+}
+
+.flex-header {
+    display: flex; 
+    justify-content: space-between; 
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+button, input[type=button], input[type=submit], input[type=reset] {
+    background-color: #454545;
+    border: .15rem solid #E6E6E6;
+    color: #E6E6E6;
+    font-size: 1rem;
+    font-family: "Kumbh Sans", sans-serif;
+    padding: .5rem 1.5rem;
+    box-shadow: 0px 5px 5px rgb(43, 43, 43);
+    cursor: pointer;
+}
+
+button:hover, input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover,
+ option:hover, #meal_type option:focus, #meal_type option:active {
+    background-color: #E6E6E6 !important;
+    color: #454545 !important;
+}
+ 
+p { 
+  font-family: "Kumbh Sans", sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;  
+    height: 100%;
+    padding-bottom: .6rem;
+}
+
+table {
+    border: 2px solid #ccc;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table tr {
+    border: 2px solid #ddd;
+    padding: .35em;
+}
+
+table th,
+table td {
+    padding: .625em;
+    text-align: center;
+}
+
+td, th {
+    border: 2px solid #ddd; 
+}
+
+table th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.test {
+    width: 100%;
+    height:100%;
+    position:fixed;
+    background-color:purple;
+}
+
+.plate {
+    position: fixed;
+    left: -14%;
+    bottom: -25%;
+    width:450px;
+    height:450px; 
+}
+
+.plate-right {
+    position: absolute;
+    right: -14%;
+    bottom: -25%;
+    width:450px;
+    height:450px; 
+    overflow-y: hidden;
+}
+
+.thumb { 
+    border-radius: 5px;
+    box-shadow: 0px 2px 2px rgb(43, 43, 43);
+}
+
+.fork-knife { 
+    position: fixed;
+    right: -9%;
+    top: -27%;
+    width:500px;
+    height:500px;
+}
+
+.meal-result-container {
+    display: grid;
+    grid-template-columns: 300px auto; 
+    justify-content: center; 
+    grid-gap: 4%;
+}
+ 
+.meal-pic {
+    border: .2rem solid #E6E6E6;
+    border-radius: 30px;
+    box-shadow: 0px 5px 5px rgb(43, 43, 43);
+}
+
+fieldset {
+    border: .15rem solid #E6E6E6;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 5px 5px rgb(43, 43, 43);
+}
+ 
+.meal_btn {   
+    margin-right: .6rem; 
+    margin-top: .6rem;
+    margin-bottom: .6rem;
+    padding: .3rem .7rem !important;  
+    border-radius: 7px;
+    display: inline-block;
+}
+
+hr {
+    margin-top: .8rem;
+    margin-bottom: .8rem;
+}
+
+input[type="date"] {
+    color:#454545;
+    font-family: "Kumbh Sans", sans-serif; 
+    font-size: 1rem;
+}
+
+input[type=file] { 
+    color: #E6E6E6;
+    font-family: "Kumbh Sans", sans-serif; 
+    font-size: 1rem;
+}
+
+input[type=file]::file-selector-button {
+    display: none;
+}
+
+input[type=text] { 
+    font-size: 1rem;
+    font-family: "Kumbh Sans", sans-serif; 
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+    }
+
+    table thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 2px;
+        margin: -2px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 2px;
+    }
+
+    table tr {
+        border-bottom: 2px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+
+    table td {
+        border-bottom: 2px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+
+    td, th {
+        border: none;
+        border-bottom: 2px solid #ddd;
+    }
+
+    table td::before {
+        /*
+        * aria-label has no advantage, it won't be read inside a table
+        content: attr(aria-label);
+        */
+        content: attr(data-label);
+        float: left;
+        margin-right:8%;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    table td:last-child {
+        border-bottom: 0;
+    }
+
+    
+    .plate { 
+        left: 50%;
+        -webkit-transform: translate(-50%, 0%);
+        transform: translate(-50%, 0%);  
+        top: -18%;
+        width:330px;
+        height:330px;
+
+    }
+
+    h1, .title {
+        font-size: 3rem;
+        margin-bottom:4%; 
+    }
+
+    body, p {
+        font-size: 1.2rem;
+    }
+
+    .fork-knife {
+        visibility: hidden;
+    }
+
+    .meal-result-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+ 
+    .meal-type-container {
+        display:flex;
+        flex-wrap: wrap;
+        height:100%;
+    }
+
+    .meal_btn { 
+        margin-bottom: .4rem;
+    }
+
+    body {
+        padding: 1.5rem;
+    }
+}

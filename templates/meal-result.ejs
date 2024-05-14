@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>PlatePal</title>
+</head>
+<body>
+    <div class="flex-header">
+        <a class="title" href="/welcome">PlatePal</a>
+        <span>Welcome, <%- name %>!</span>
+    </div> 
+
+    <div class="meal-result-container">
+        <div><h3>Your meal: </h3> 
+            <img src="uploads/<%= img %>" width="300" alt="<%= img %>" class="meal-pic"/><br><br>
+            
+        </div> 
+        
+        <div>
+            <h3>Your results:</h3> 
+
+            <div class="meal-result-text">
+                <%- mealResult %> 
+            </div><br>
+
+            <form action="/past-meals">
+                <input type="submit" value="View past meals >"/>
+            </form>
+        </div>
+    </div><br> 
+    
+      <br> 
+</body>
+</html>

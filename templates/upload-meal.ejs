@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>PlatePal</title>
+</head>
+<body> 
+    <div class="flex-header">
+        <a class="title" href="/welcome">PlatePal</a>
+        <span>Welcome, <%- name %>!</span>
+    </div> <br>
+
+    <h3>Enter meal data:</h3>
+    <form action="/view-meal-results" method="post" enctype="multipart/form-data" onsubmit="startLoader()"> 
+        <fieldset>
+            <b>Upload an image of your meal:</b><br>
+            <input type="button" onclick="triggerClick()" class="meal_btn" value="Choose Image"/>
+            <input type="file" id="files" name="meal-pic" accept="image/*" required><br><hr>
+             
+
+            <b>Type of meal:</b> <br>
+
+            <input type="hidden" name="meal_type" id="meal_type" value="meal">
+            <div class="meal-type-container">
+                <input type="button" class="meal_btn" value="Breakfast" onclick="setMealType(this, 'breakfast')"/>
+                <input type="button" class="meal_btn" value="Lunch" onclick="setMealType(this, 'lunch')"/>
+                <input type="button" class="meal_btn" value="Dinner" onclick="setMealType(this, 'dinner')"/>
+            </div>
+            <hr> 
+
+            <label for="meal-date"><b>Date consumed:</b></label> 
+            <input type="date" id="meal-date" name="meal_date" required><br> 
+            
+            <!-- 
+            <div class="slidecontainer">
+                <label for="meal-taste">Rank the taste (between 0 and 10)!</label>
+                <input type="range" min="0" max="10" value="5" class="slider" id="meal-taste" name="meal-taste" required>
+                <span id="range-val"></span>
+            </div>  -->
+    
+            <br><input type="submit" id="submit">
+        </fieldset>
+    </form>
+    <br>
+    <div id="loader">Processing your image...</div>
+
+    <!-- <script>
+        var slider = document.getElementById("meal-taste");
+        var output = document.getElementById("range-val");
+        output.innerHTML = slider.value; // Display the default slider value
+
+        // Update the current slider value (each time you drag the slider handle)
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }
+    </script> -->
+    <script>
+        let lastClicked = undefined; 
+        document.getElementById("loader").style.visibility = "hidden";
+        
+        function startLoader() {
+            document.getElementById("loader").style.visibility = "visible"; 
+            document.getElementById("submit").disabled = true;
+        }
+
+        function triggerClick() {
+            document.getElementById("files").click();
+        }
+
+        function setMealType(elt, newVal) {
+            if (lastClicked != undefined) {
+                lastClicked.style.backgroundColor = "#454545";
+                lastClicked.style.color = "#e6e6e6"; 
+            }
+
+            lastClicked = elt;
+            elt.style.color = "#454545";
+            elt.style.backgroundColor = "#e6e6e6";
+            document.getElementById("meal_type").value = newVal; 
+        } 
+    </script>
+</body>
+</html>

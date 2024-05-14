@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>PlatePal</title>
+</head>
+<body>
+    
+    <div class="flex-header">
+        <a class="title" href="/welcome">PlatePal</a>
+        <span>Welcome, <%- name %>!</span>
+    </div> <br>
+    <h3>Your past meals:</h3> 
+    <%- mealsTable %>
+
+    <br><br>
+    <form action="/upload-meal">
+        <input type="submit" value="Enter new meal >"/>
+    </form> <br>
+
+    <br><br>
+</body>
+</html>
