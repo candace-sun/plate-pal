@@ -138,6 +138,9 @@ table th {
 .thumb { 
     border-radius: 5px;
     box-shadow: 0px 2px 2px rgb(43, 43, 43);
+    width: 130px;
+    height: 130px;
+    object-fit: cover; 
 }
 
 .fork-knife { 

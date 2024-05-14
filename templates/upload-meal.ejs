@@ -19,6 +19,7 @@
             <input type="button" onclick="triggerClick()" class="meal_btn" value="Choose Image"/>
             <input type="file" id="files" name="meal-pic" accept="image/*" required><br><hr>
              
+            <input type="hidden" name="pic_mime_type" id="pic_mime_type" value="">
 
             <b>Type of meal:</b> <br>
 
@@ -59,6 +60,12 @@
     <script>
         let lastClicked = undefined; 
         document.getElementById("loader").style.visibility = "hidden";
+
+        document.querySelector('input[name="meal-pic"]').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            // todo: use file pointer
+            document.getElementById("pic_mime_type").value = file.type;
+        });
         
         function startLoader() {
             document.getElementById("loader").style.visibility = "visible"; 

@@ -9,15 +9,19 @@ const sharp = require('sharp');
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './public/uploads')
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname)
-    }
-});
-const upload = multer({ storage: storage, dest: 'public/uploads/' });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// var storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, './public/uploads')
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, file.originalname)
+//     }
+// });
+// const upload = multer({ storage: storage, dest: 'public/uploads/' });
+
 let portNumber = 5000;
 require("dotenv").config({ path: path.resolve(__dirname, 'credentialsDontPost/.env') }) 
 const app = express(); /* app is a request handler function */
@@ -60,6 +64,15 @@ function fileToGenerativePart(path, mimeType) {
     };
 }
 
+function bufferToGenerativePart(buffer, mimeType) {
+    return {
+      inlineData: {
+        data: buffer.toString("base64"),
+        mimeType
+      },
+    };
+}
+
 app.get("/", (request, response) => { 
     response.render("index"); 
 });
@@ -94,7 +107,7 @@ app.post("/welcome", async (request, response) => {
                         .findOne(data);
         
         if (!userExists) {
-            newData = {...data, meals: []};
+            let newData = {...data, meals: []};
             const result = await client.db(databaseAndCollection.db).collection(databaseAndCollection.collection).insertOne(newData);
             console.log(`User entry created with id ${result.insertedId}`); 
             request.session.id = result.insertedId;
@@ -123,6 +136,34 @@ app.get("/upload-meal", (request, response) => {
     response.render(to_render, user);
 });
 
+app.get('/:name/:passphrase/:meal_index/picture', async (req, res) => {
+    let data = {name: req.params.name, passphrase: req.params.passphrase}; 
+
+    try {
+        await client.connect(); 
+        const userExists = await client.db(databaseAndCollection.db)
+                        .collection(databaseAndCollection.collection)
+                        .findOne(data);
+        
+        if (userExists) { 
+            let i = parseInt(req.params.meal_index);
+            let meal = userExists.meals[i]; 
+            let img = Buffer.from(meal.img.data, 'base64');
+
+            res.writeHead(200, {
+                'Content-Type': meal.img.contentType,
+                'Content-Length': img.length
+              });
+              res.end(img); 
+        }  
+    } 
+    catch (e) {
+        console.error(e);
+    } finally {
+        await client.close();
+    }   
+  });
+
 app.post("/view-meal-results", upload.single('meal-pic'), async (request, response) => { 
     let user = {name: "", passphrase: ""};
     
@@ -135,12 +176,7 @@ app.post("/view-meal-results", upload.single('meal-pic'), async (request, respon
     }
 
     let data = {mealType: request.body.meal_type, mealDate: request.body.meal_date};
-    let img = request.file;
-    // console.log(img.path);
-    // console.log(img.mimetype);
-    // console.log(img.size);
-    // console.log(img.filename);
-    // console.log(data.mealType);
+    let img = request.file; // buffer
 
     // generate analysis of meal with Gemini AI API
     const prompt = `Please provide a brief description of how well-balanced this ${data.mealType} is, without the word "sure". 
@@ -149,7 +185,7 @@ app.post("/view-meal-results", upload.single('meal-pic'), async (request, respon
     for recommendations on improving the balance. Please also include a healthiness rating out of 10 at the bottom, 
     labelled with "Overall Score:" and no formatting.`;
 
-    const imagePart = fileToGenerativePart(img.path, img.mimetype);
+    const imagePart = bufferToGenerativePart(img.buffer, request.body.pic_mime_type);
 
     const result = await model.generateContent([prompt, imagePart]);
     const model_response = result.response;
@@ -191,22 +227,23 @@ app.post("/view-meal-results", upload.single('meal-pic'), async (request, respon
         
         if (userExists) {
             // generate thumbnail
-            let dir = `public/uploads/${userExists._id.toString()}`;
-            if (!fs.existsSync(dir)){
-                fs.mkdirSync(dir);
-            }
+            // let dir = `public/uploads/${userExists._id.toString()}`;
+            // if (!fs.existsSync(dir)) {
+            //     fs.mkdirSync(dir);
+            // }
 
-            let thumb_path = `uploads/${userExists._id.toString()}/thumb-` + img.originalname;
-            sharp(img.path).resize(130, 130).toFile("public/" + thumb_path, (err, resizeImage) => {
-                if (err) {
-                    console.log(err);
-                } // else {
-                //     console.log(resizeImage);
-                // }
-            });
+            // let thumb_path = `uploads/${userExists._id.toString()}/thumb-` + img.originalname;
+            // sharp(img.path).resize(130, 130).toFile("public/" + thumb_path, (err, resizeImage) => {
+            //     if (err) {
+            //         console.log(err);
+            //     } // else {
+            //     //     console.log(resizeImage);
+            //     // }
+            // });
+            let index = userExists.meals.length;
 
             let newMealData = {date: data.mealDate, type: data.mealType, foods: foods, healthScore: score,
-                        thumbnail: thumb_path};
+                        img: {data: img.buffer.toString("base64"), contentType: request.body.pic_mime_type, meal_index: index }};
 
             const push_result = await client.db(databaseAndCollection.db)
                         .collection(databaseAndCollection.collection)
@@ -215,11 +252,11 @@ app.post("/view-meal-results", upload.single('meal-pic'), async (request, respon
                             { $push: { meals: newMealData } }
                          )
             console.log("Pushed data!");
+
+            
+            response.render("meal-result", {...user, mealResult: html, meal_index: index});
         }  
-        
-        response.render("meal-result", {name: user.name, mealResult: html, img: img.filename});
-        request.session.lastImg = img.path; 
-        request.session.save();
+          
     } 
     catch (e) {
         console.error(e);
@@ -249,7 +286,7 @@ app.get("/past-meals", async (request, response) => {
           <th>Image</th>
       </tr>
     </thead>
-    <tbody>`;
+    <tbody>`; //<th>Image</th>
 
     try {
         await client.connect();
@@ -260,14 +297,16 @@ app.get("/past-meals", async (request, response) => {
         const meals = result.meals;
 
         meals.forEach(elt => {
+            let src = `/${user.name}/${user.passphrase}/${elt.img.meal_index}/picture`;
+
             mealsTable += `<tr>
                 <td data-label="Date">${elt.date}</td>
                 <td data-label="Meal Type">${elt.type}</td>
                 <td data-label="Foods">${elt.foods}</td>
-                <td data-label="Health Score">${elt.healthScore}/10</td>
-                <td data-label="Image"><img src="${elt.thumbnail}" class="thumb"/></td>
+                <td data-label="Health Score">${elt.healthScore}/10</td> 
+                <td data-label="Image"><img src="${src}" class="thumb" alt="meal pic"/></td>
               </tr>`
-          });
+          }); //<td data-label="Image"><img src="${elt.pic}" class="thumb"/></td>
         
         mealsTable += "</tbody></table>";
         
