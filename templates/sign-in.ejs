@@ -12,8 +12,8 @@
     <div class="centered-container">
         <h1>PlatePal</h1>
         <form action="/welcome" method="post" onsubmit="startLoader()">
-            <label for="name">What's your name?<br><br> <input type="text" name="name" required/></label><br><br>
-            <label for="name">Enter a passphrase:<br><br> <input type="text" name="passphrase" required/></label><br><br><br>
+            <label for="name">What's your name?<br><br> <input onkeydown="return /[a-z]/i.test(event.key)" type="text" name="name" required/></label><br><br>
+            <label for="name">Enter a passphrase:<br><br> <input onkeydown="return /[a-z]/i.test(event.key)" type="text" name="passphrase" required/></label><br><br><br>
             <input type="submit" value="Continue >" /> <br>
         </form><br>
 
