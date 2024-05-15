@@ -261,7 +261,7 @@ input[type=text] {
         left: 50%;
         -webkit-transform: translate(-50%, 0%);
         transform: translate(-50%, 0%);  
-        top: -18%;
+        top: -26%;
         width:330px;
         height:330px;
 
@@ -273,7 +273,7 @@ input[type=text] {
     }
 
     body, p {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .fork-knife {
